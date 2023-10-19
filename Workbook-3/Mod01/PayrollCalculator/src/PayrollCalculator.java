@@ -15,8 +15,9 @@ public class PayrollCalculator {
                 double hoursWorked = Double.parseDouble(tokens[2].trim());
                 double payRate = Double.parseDouble(tokens[3].trim());
                 Employee employee = new Employee(employeeId, name, hoursWorked, payRate);
-                System.out.printf("Employee ID: %d, Name: %s, Gross Pay: %.2f%n",
-                        employee.getEmployeeId(),employee.getName(),employee.getGrossPay());
+                System.out.println(employee);
+                //System.out.printf("Employee ID: %d, Name: %s, Gross Pay: %.2f%n",
+                        //employee.getEmployeeId(),employee.getName(),employee.getGrossPay());
             }
         } catch (IOException e) {
             e.printStackTrace();

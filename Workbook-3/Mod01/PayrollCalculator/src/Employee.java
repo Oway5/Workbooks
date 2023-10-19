@@ -30,5 +30,9 @@ public class Employee {
     public double getGrossPay() {
         return hoursWorked * payRate;
     }
+    @Override
+    public String toString() {
+        return String.format("Employee ID: %d, Name: %s, Gross Pay: %.2f", employeeId, name, getGrossPay());
+    }
 }
 
