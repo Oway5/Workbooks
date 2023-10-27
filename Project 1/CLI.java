@@ -2,11 +2,7 @@ class CLI {
     // ...
 
     public void start() {
-        boolean running = true;
-        while(running) {
-            showHomeScreen();
-           
-        }
+        
     }
 
     private void showHomeScreen() {
@@ -14,6 +10,7 @@ class CLI {
     }
 
     private void handleAddDeposit() {
+
     }
 
     private void handleMakePayment() {

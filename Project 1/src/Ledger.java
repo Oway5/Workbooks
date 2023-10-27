@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 class Ledger {
@@ -20,14 +22,14 @@ class Ledger {
 
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        System.out.println("Make a selection:");
+        System.out.println("[ LEDGER ]");
         for (String thing : options) { System.out.println(thing); }
         this.awaitSelect();
     }
 
     public void awaitSelect() {
         Scanner scan = new Scanner(System.in);
-        String in = scan.nextLine();
+        String in = scan.nextLine().toUpperCase();
         char all = 'A';
         char depo = 'D';
         char payments = 'P';
@@ -35,21 +37,67 @@ class Ledger {
         char exit = 'E';
         char reports = 'R';
         if (in.charAt(0) == all) {
-            
-        }
-        else if (in.charAt(0) == depo) {
-            
-        }
-        else if (in.charAt(0) == payments) {
+            try { displayAll(); }
+            catch (IOException e) { e.printStackTrace(); }
+        } else if (in.charAt(0) == depo) {
+            try { displayDeposits(); }
+            catch (IOException e) { e.printStackTrace(); }
+        } else if (in.charAt(0) == payments) {
 
         }
         else if (in.charAt(0) == home) { back.build(); }
-        else if (in.charAt(0) == exit) {
-            
-        }
+        else if (in.charAt(0) == exit) { System.exit(0); }
         else if (in.charAt(0) == reports) {
             
         }
         scan.close();
+    }
+    
+    public void displayDeposits() throws IOException {
+        File file = new File("./transactions.csv");
+        try (Scanner fileReader = new Scanner(file)) {
+            int num = 1;
+            while (fileReader.hasNextLine()) {
+                String line = fileReader.nextLine();
+                String[] split = line.split("\\|");
+                double amt = Double.parseDouble(split[split.length - 1]);
+                boolean display = Double.compare(amt, 0.0) > 0;
+                if (display) { 
+                    System.out.println(num + ". " + line);
+                }
+                num++;
+            }
+        }
+
+    }
+
+    public void displayPayments() throws IOException {
+        File file = new File("./transactions.csv");
+        try (Scanner fileReader = new Scanner(file)) {
+            int num = 1;
+            while (fileReader.hasNextLine()) {
+                String line = fileReader.nextLine();
+                String[] split = line.split("\\|");
+                double amt = Double.parseDouble(split[split.length - 1]);
+                boolean display = Double.compare(amt, 0.0) < 0;
+                if (display) { 
+                    System.out.println(num + ". " + line);
+                }
+                num++;
+            }
+        }
+
+    }
+
+    public void displayAll() throws IOException {
+        File file = new File("./transactions.csv");
+        try (Scanner fileReader = new Scanner(file)) {
+            int num = 1;
+            while (fileReader.hasNextLine()) {
+                String line = fileReader.nextLine();
+                System.out.println(num + ". " + line);
+                num++;
+            }
+        }
     }
 }
