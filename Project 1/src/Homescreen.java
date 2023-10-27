@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.time.*;
 
 class Homescreen {
+
+    public Scanner gScan = new Scanner(System.in);
     
     public void build() {
         String[] options = {
@@ -23,38 +25,48 @@ class Homescreen {
     }
 
     public void awaitSelect() {
-        Scanner scan = new Scanner(System.in);
-        String in = scan.nextLine().toUpperCase();
         char depo = 'D';
         char pay = 'P';
         char exit = 'X';
         char ledger = 'L';
-        if (in.charAt(0) == depo) {
-            try { makeTransaction(0); }
-            catch (IOException e) { e.printStackTrace(); }
+        boolean nomistake = false;
+        while (nomistake == false) {
+            String in = gScan.nextLine().toUpperCase();
+            if (in.length() == 0) { 
+                System.out.println("[ Invalid input ]");
+            }
+            else if (in.charAt(0) == depo) {
+                nomistake = true;
+                try { makeTransaction(0); }
+                catch (IOException e) { e.printStackTrace(); }
+            }
+            else if (in.charAt(0) == pay) {
+                nomistake = true;
+                try { makeTransaction(1); }
+                catch (IOException e) { e.printStackTrace(); }
+            }
+            else if (in.charAt(0) == ledger) {
+                nomistake = true;
+                Ledger ledge = new Ledger(this);
+                ledge.build();
+            }
+            else if (in.charAt(0) == exit) {
+                nomistake = true;
+                System.exit(0);
+            }
+            else {
+                System.out.println("[ Invalid input ]");
+            }
         }
-        else if (in.charAt(0) == pay) {
-            try { makeTransaction(1); }
-            catch (IOException e) { e.printStackTrace(); }
-        }
-        else if (in.charAt(0) == ledger) {
-            Ledger ledge = new Ledger(this);
-            ledge.build();
-        }
-        else if (in.charAt(0) == exit) {
-            System.exit(0);
-        }
-        scan.close();
     }
 
     public void makeTransaction(int type) throws IOException {
-        Scanner input = new Scanner(System.in);
 
         System.out.println("[ Enter date for transaction in the format YYYY-MM-DD ]");
         boolean dateValid = false;
         String date = "";
         while (dateValid == false) {
-            String tempDate = input.nextLine();
+            String tempDate = gScan.nextLine();
             DateValidator validator = new DateValidatorFormatter("YYYY-MM-dd");
 
             if (tempDate.equals("")) date = LocalDateTime.now().toString();
@@ -70,7 +82,7 @@ class Homescreen {
         boolean timeValid = false;
         String time = "";
         while (timeValid == false) {
-            String tempTime = input.nextLine();
+            String tempTime = gScan.nextLine();
             DateValidator validator = new DateValidatorFormatter("HH-mm");
 
             if (tempTime.equals("")) time = LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute();
@@ -82,34 +94,34 @@ class Homescreen {
         }
 
         System.out.println("[ Enter description description ]");
-        String description = input.nextLine();
+        String description = gScan.nextLine();
 
         System.out.println("[ Enter vendor for vendor ]");
-        String vendor = input.nextLine();
+        String vendor = gScan.nextLine();
 
         double amt = 0;
         while (true) {
             System.out.println("[ Enter amount for amount ]");
             try {
-                amt = Double.parseDouble(input.nextLine());
+                amt = Double.parseDouble(gScan.nextLine());
                 break;
             } catch (NumberFormatException e) { System.out.println("[ Invalid double input ]"); }
         }
 
         File file = new File("./transactions.csv");
 
-        FileWriter fw = new FileWriter(file);
+        FileWriter fw = new FileWriter(file, true);
         BufferedWriter bw = new BufferedWriter(fw);
 
         if (type == 0) {
-            bw.write(date + "|" + time + "|" + description + "|" + vendor + "|" + amt);
+            bw.append(date + "|" + time + "|" + description + "|" + vendor + "|" + amt);
         } else if (type == 1) {
-            bw.write(date + "|" + time + "|" + description + "|" + vendor + "|-" + amt);
+            bw.append(date + "|" + time + "|" + description + "|" + vendor + "|-" + amt);
         }
+        bw.newLine();
 
         bw.close();
         fw.close();
-        input.close();
         this.build();
     }
 }

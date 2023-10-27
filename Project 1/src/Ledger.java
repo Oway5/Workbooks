@@ -5,6 +5,7 @@ import java.util.Scanner;
 class Ledger {
 
     private Homescreen back;
+    public Scanner gScan = new Scanner(System.in);
 
     public Ledger(Homescreen back) {
         this.back = back;
@@ -28,29 +29,34 @@ class Ledger {
     }
 
     public void awaitSelect() {
-        Scanner scan = new Scanner(System.in);
-        String in = scan.nextLine().toUpperCase();
         char all = 'A';
         char depo = 'D';
         char payments = 'P';
         char home = 'H';
         char exit = 'E';
         char reports = 'R';
-        if (in.charAt(0) == all) {
-            try { displayAll(); }
-            catch (IOException e) { e.printStackTrace(); }
-        } else if (in.charAt(0) == depo) {
-            try { displayDeposits(); }
-            catch (IOException e) { e.printStackTrace(); }
-        } else if (in.charAt(0) == payments) {
+        boolean nomistake = false;
+        while (nomistake == false) {
+            String in = gScan.nextLine().toUpperCase();
+            if (in.length() == 0) { 
+                System.out.println("[ Invalid input ]");
+            } else if (in.charAt(0) == all) {
+                try { displayAll(); }
+                catch (IOException e) { e.printStackTrace(); }
+            } else if (in.charAt(0) == depo) {
+                try { displayDeposits(); }
+                catch (IOException e) { e.printStackTrace(); }
+            } else if (in.charAt(0) == payments) {
+                try { displayPayments(); }
+                catch (IOException e) { e.printStackTrace(); }
+            }
+            else if (in.charAt(0) == home) { back.build(); }
+            else if (in.charAt(0) == exit) { System.exit(0); }
+            else if (in.charAt(0) == reports) {
+    
+            }
+        }
 
-        }
-        else if (in.charAt(0) == home) { back.build(); }
-        else if (in.charAt(0) == exit) { System.exit(0); }
-        else if (in.charAt(0) == reports) {
-            
-        }
-        scan.close();
     }
     
     public void displayDeposits() throws IOException {
