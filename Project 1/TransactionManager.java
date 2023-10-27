@@ -1,4 +1,6 @@
-class TransactionManager {
+import java.util.*;
+
+public class TransactionManager {
     // ...
 
     public List<Transaction> getDeposits() {
