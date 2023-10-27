@@ -53,7 +53,12 @@ class Ledger {
             else if (in.charAt(0) == home) { back.build(); }
             else if (in.charAt(0) == exit) { System.exit(0); }
             else if (in.charAt(0) == reports) {
-    
+                nomistake = true;
+                Reports report = new Reports(this);
+                report.build();
+            }
+            else {
+                System.out.println("[ Invalid input ]");
             }
         }
 
