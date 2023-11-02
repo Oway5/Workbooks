@@ -115,7 +115,7 @@ class Homescreen {
 
         if (type == 0) {
             bw.append(date + "|" + time + "|" + description + "|" + vendor + "|" + amt);
-        } else if (type == 1) {
+        } else if (type == 1) { //such ans such is for negative
             bw.append(date + "|" + time + "|" + description + "|" + vendor + "|-" + amt);
         }
         bw.newLine();
